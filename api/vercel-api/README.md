@@ -6,3 +6,4 @@ Simple, easy way to generate a serverless api
 
 1. Install with `yarn` or `npm install`
 2. Local dev with `yarn start` or `npm run start`
+3.
