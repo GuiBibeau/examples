@@ -14,44 +14,44 @@ Deploy on Vercel using this button. This will guide you and setup all in your ow
 
 ## usage
 
-connect/disconnect:
+Everything you need in 1 hook:
 
 ```tsx
-import { useConnect } from "wen-connect";
+import { useWen, getSession } from "wen-connect";
 
 const component = () => {
-  // call these functions
-  const { connect, disconnect } = useConnect();
+  const { connect, disconnect, wallet } = useWen(props.session);
+
+  return <>{wallet.address}</>;
 };
 ```
 
-get current address
+Get the session data on the server:
 
 ```tsx
-import { useWen } from "wen-connect";
-
-
-  // empty string if not connected
-  const { address } = useWen();
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: {
+      session: getSession(context),
+    },
+  };
 };
 ```
 
-get address in `getServerSideProps`
+Hydrate the client side hook with the server session to avoid rerenders:
 
 ```tsx
-import { useWen } from "wen-connect";
+export default function Demo(props: Props) {
+  const { connect, disconnect, wallet } = useWen(props.session);
 
-///...
-import {  getSession } from "wen-connect";
+  return <>{wallet.address}</>;
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const serverAddress = await getSession(context);
-
-  // fetch some data to display based on user address
-
-return {
+  return {
     props: {
-        /// your data
-    }
-}
+      session: getSession(context),
+    },
+  };
+};
 ```

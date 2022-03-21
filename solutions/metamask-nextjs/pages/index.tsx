@@ -11,7 +11,6 @@ export default function Demo(props: Props) {
   const router = useRouter();
   const { connect, disconnect, wallet } = useWen(props.session);
 
-  console.log(props.session);
   const handleConnect = () => {
     connect();
   };
@@ -23,7 +22,6 @@ export default function Demo(props: Props) {
   const handler = wallet.connected ? handleDisconnect : handleConnect;
   const addressText = wallet.connected ? wallet.address : "Connect";
   const handlerText = wallet.connected ? "Disconnect" : "Connect";
-  // console.log(wallet);
 
   return (
     <>
