@@ -1,12 +1,17 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useConnect, useWen, getSession } from "wen-connect";
+import { useWen, getSession } from "wen-connect";
+import { WenSession } from "wen-connect/dist/core/models";
 
-export default function Demo({ serverAddress }: { serverAddress: string }) {
+type Props = {
+  session: WenSession;
+};
+
+export default function Demo(props: Props) {
   const router = useRouter();
-  const { connect, disconnect } = useConnect();
-  const { address } = useWen();
+  const { connect, disconnect, wallet } = useWen(props.session);
 
+  console.log(props.session);
   const handleConnect = () => {
     connect();
   };
@@ -15,9 +20,10 @@ export default function Demo({ serverAddress }: { serverAddress: string }) {
     disconnect();
   };
 
-  const handler = address.length > 0 ? handleDisconnect : handleConnect;
-  const handlerText = address.length > 0 ? "Disconnect" : "Connect";
-  const addressText = address.length > 0 ? address : "not connected";
+  const handler = wallet.connected ? handleDisconnect : handleConnect;
+  const addressText = wallet.connected ? wallet.address : "Connect";
+  const handlerText = wallet.connected ? "Disconnect" : "Connect";
+  // console.log(wallet);
 
   return (
     <>
@@ -38,7 +44,9 @@ export default function Demo({ serverAddress }: { serverAddress: string }) {
                 </button>
                 <div>Server side </div>
                 <div className="text-sm">
-                  {serverAddress ? serverAddress : "not connected in SSR"}
+                  {props.session.wallet.connected
+                    ? props.session.wallet.address
+                    : "not connected in SSR"}
                 </div>
                 <button
                   onClick={() => router.replace("/")}
@@ -56,11 +64,9 @@ export default function Demo({ serverAddress }: { serverAddress: string }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const serverAddress = await getSession(context);
-  // this is where you will prefetch data when a user is authenticated
   return {
     props: {
-      serverAddress,
+      session: getSession(context),
     },
   };
 };

@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <WenProvider ssr>
+    <WenProvider config={{ ssr: true }}>
       <Component {...pageProps} />
     </WenProvider>
   );
