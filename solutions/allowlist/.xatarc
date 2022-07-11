@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://web3-full-stack-mcrsd4.xata.sh/db/allowlist-demo",
+  "codegen": {
+    "output": "lib/xata.ts"
+  }
+}
