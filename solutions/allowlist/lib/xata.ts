@@ -6,11 +6,11 @@ export interface Member {
   amount_minted?: number | null;
 }
 
-export type MemberRecord = Member & XataRecord;
-
 export type DatabaseSchema = {
   members: Member;
 };
+
+export type MemberRecord = Member & XataRecord;
 
 const tables = ["members"];
 
